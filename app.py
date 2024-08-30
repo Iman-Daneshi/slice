@@ -29,7 +29,8 @@ class Url(db.Model):
 
 def generate_short_url(length=8):
     characters = string.ascii_letters + string.digits
-    return ''.join(random.choice(characters) for _ in range(length))
+    random_str = ''.join(random.choice(characters) for _ in range(length))
+    return "https://www.tinyslice.com/" + random_str
 
 @app.route('/shorten', methods=['POST'])
 def shorten_url():
@@ -46,7 +47,7 @@ def shorten_url():
             "short_url": url_record.short_url
         }), 200
 
-    short_url = "https://www.tinyslice.com/"+ generate_short_url()
+    short_url = generate_short_url()
     while Url.query.filter_by(short_url=short_url).first():
         short_url = generate_short_url()  # Ensure uniqueness
 
